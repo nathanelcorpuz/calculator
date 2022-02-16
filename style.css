@@ -24,7 +24,7 @@ main {
     border-radius: 15px;
 }
 
-.text-container {
+.display-container {
     background-color: gray;
     margin: 1vmin 1vmin 0.25vmin 1vmin;
     border-radius: 10px;
@@ -37,7 +37,7 @@ main {
     justify-content: end;
 }
 
-.text-boxes {
+.display-boxes {
     display: flex;
     justify-content: end;
     align-items: center;
@@ -45,7 +45,7 @@ main {
     height: 100%;
 }
 
-.lower-box {
+.lower-display {
     font-size: 1.45em;
 }
 
