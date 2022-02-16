@@ -45,6 +45,10 @@ main {
     height: 100%;
 }
 
+.lower-box {
+    font-size: 1.45em;
+}
+
 
 .rows {
     display: grid;

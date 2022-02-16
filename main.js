@@ -8,6 +8,8 @@ let x = null;
 let y = null;
 let sign = '';
 let result = null;
+let detectEquals = 0;
+let errorDetect = 0;
 
 buttons.forEach(button => button.addEventListener('click', e => {
 
@@ -16,24 +18,44 @@ buttons.forEach(button => button.addEventListener('click', e => {
         y = null;
         result = null;
         sign = '';
-        
+        detectEquals = 0;
+        errorDetect = 0;
         lowerDisplay.textContent = '';
         upperDisplay.textContent = '';
+        lowerDisplay.style = 'font-size: 1.45em;';
+    }
+
+    if (errorDetect) {
+        return;
     }
 
     if (e.target.innerText.search(/[0-9]/) === 0) {
-        if (lowerDisplay.textContent == result) {
+        if (lowerDisplay.textContent == result && detectEquals !== 0) {
             lowerDisplay.textContent = '';
             upperDisplay.textContent = '';
+        }
+        if(detectEquals === 1) {
+            detectEquals--;
         }
         lowerDisplay.textContent += e.target.innerText;
     };
 
     if (e.target.innerText.search(/[/*\-+]/) === 0) {
         if (upperDisplay.textContent.includes('+') || upperDisplay.textContent.includes('-') || upperDisplay.textContent.includes('*') || upperDisplay.textContent.includes('/')) {
+            if (lowerDisplay.textContent.includes('-')) {
+            }
+
+            if(detectEquals) {
+                x = result;
+                upperDisplay.textContent = `${x} ${e.target.innerText}`;
+                y = +lowerDisplay.textContent;
+                detectEquals--;
+                console.log('detectEquals decreased');
+                return;
+            }
+            
             y = +lowerDisplay.textContent;
-            result = operate(x,y,sign);
-            console.log(result);
+            result = operate(+x,+y,sign);
             lowerDisplay.textContent = result;
             sign = e.target.innerText;
             x = +lowerDisplay.textContent;
@@ -48,16 +70,21 @@ buttons.forEach(button => button.addEventListener('click', e => {
     }
 
     if (e.target.innerText === '=') {
+        if (detectEquals >= 1) {
+            lowerDisplay.textContent = 'ERROR, press CLEAR to reset';
+            lowerDisplay.style = 'font-size: 1em'
+            upperDisplay.textContent = '';
+            errorDetect++;
+            return;
+        }
         if (x !== null) {
+            detectEquals++;
             y = +lowerDisplay.textContent;
             result = operate(x,y,sign);
             upperDisplay.textContent = `${x} ${sign} ${y}`;
             lowerDisplay.textContent = result;
-            x = null;
-            y = null;
         }
     }
-
 }));
 
 function operate(x,y,operation) {
