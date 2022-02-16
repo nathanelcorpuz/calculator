@@ -17,7 +17,7 @@ const regExOperations = /[+\-*/]/;
 
 buttons.forEach(button => button.addEventListener('click', e => {
     if (e.target.innerText.search(/[0-9]/) === 0) {
-        if (lowerBox.textContent !== '') {
+        if (lowerBox.textContent == result) {
             lowerBox.textContent = '';
         }
         lowerBoxValue += e.target.innerText;
@@ -28,8 +28,8 @@ buttons.forEach(button => button.addEventListener('click', e => {
     else if (e.target.innerText === 'C') {
         x = 0;
         y = 0;
-        sign = '';
         result = 0;
+        sign = '';
         lowerBox.textContent = '';
         lowerBoxValue = '';
     }
@@ -38,11 +38,10 @@ buttons.forEach(button => button.addEventListener('click', e => {
         if (x !== 0) {
             y = +lowerBoxValue;
             lowerBoxValue = '';
-            let result = operate(x,y,sign);
+            result = operate(x,y,sign);
             lowerBox.textContent = result;
             x = 0;
             y = 0;
-            result = 0;
             return;
         }
     }
@@ -52,7 +51,7 @@ buttons.forEach(button => button.addEventListener('click', e => {
         if (x !== 0) {
             y = +lowerBoxValue;
             lowerBoxValue = '';
-            let result = operate(x,y,sign);
+            result = operate(x,y,sign);
             lowerBox.textContent = result;
             x = 0;
             return;
