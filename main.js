@@ -1,70 +1,64 @@
 import * as basicOps from '/modules/basicOps.js';
 
-const upperBox = document.querySelector('.upper-box');
-const lowerBox = document.querySelector('.lower-box');
-const htmlElem = document.querySelector('html');
+const upperDisplay = document.querySelector('.upper-box');
+const lowerDisplay = document.querySelector('.lower-box');
 const buttons = document.querySelectorAll('.btn');
 
-let lowerBoxValue = '';
-let upperBoxValue = '';
-let x = 0;
-let y = 0;
+let x = null;
+let y = null;
 let sign = '';
-let result = 0;
-
-const regExAlphabet = /[A-Za-z]/;
-const regExOperations = /[+\-*/]/;
+let result = null;
 
 buttons.forEach(button => button.addEventListener('click', e => {
-    if (e.target.innerText.search(/[0-9]/) === 0) {
-        if (lowerBox.textContent == result) {
-            lowerBox.textContent = '';
-        }
-        lowerBoxValue += e.target.innerText;
-        lowerBox.textContent += e.target.innerText;
-        return;
-    }
 
-    else if (e.target.innerText === 'C') {
-        x = 0;
-        y = 0;
-        result = 0;
+    if (e.target.innerText === 'CLEAR') {
+        x = null;
+        y = null;
+        result = null;
         sign = '';
-        lowerBox.textContent = '';
-        lowerBoxValue = '';
+        
+        lowerDisplay.textContent = '';
+        upperDisplay.textContent = '';
     }
 
-    else if (e.target.innerText === '=') {
-        if (x !== 0) {
-            y = +lowerBoxValue;
-            lowerBoxValue = '';
+    if (e.target.innerText.search(/[0-9]/) === 0) {
+        if (lowerDisplay.textContent == result) {
+            lowerDisplay.textContent = '';
+            upperDisplay.textContent = '';
+        }
+        lowerDisplay.textContent += e.target.innerText;
+    };
+
+    if (e.target.innerText.search(/[/*\-+]/) === 0) {
+        if (upperDisplay.textContent.includes('+') || upperDisplay.textContent.includes('-') || upperDisplay.textContent.includes('*') || upperDisplay.textContent.includes('/')) {
+            y = +lowerDisplay.textContent;
             result = operate(x,y,sign);
-            lowerBox.textContent = result;
-            x = 0;
-            y = 0;
+            console.log(result);
+            lowerDisplay.textContent = result;
+            sign = e.target.innerText;
+            x = +lowerDisplay.textContent;
+            lowerDisplay.textContent = '';
+            upperDisplay.textContent = `${x} ${sign}`;
             return;
         }
-    }
-
-    else if (e.target.innerText.search(regExOperations) === 0) {
         sign = e.target.innerText;
-        if (x !== 0) {
-            y = +lowerBoxValue;
-            lowerBoxValue = '';
-            result = operate(x,y,sign);
-            lowerBox.textContent = result;
-            x = 0;
-            return;
-        }
-        x = +lowerBoxValue;
-        lowerBoxValue = '';
-        lowerBox.textContent = '';
+        x = +lowerDisplay.textContent;
+        lowerDisplay.textContent = '';
+        upperDisplay.textContent = `${x} ${sign}`;
     }
-}))
 
-htmlElem.addEventListener('keypress', e => {
+    if (e.target.innerText === '=') {
+        if (x !== null) {
+            y = +lowerDisplay.textContent;
+            result = operate(x,y,sign);
+            upperDisplay.textContent = `${x} ${sign} ${y}`;
+            lowerDisplay.textContent = result;
+            x = null;
+            y = null;
+        }
+    }
 
-});
+}));
 
 function operate(x,y,operation) {
     if (operation === '+') {
