@@ -12,11 +12,15 @@ let result1 = null;
 let result2 = null;
 
 html.addEventListener('keypress', e => {
-    
+    console.log(e.key)
 })
 
 buttons.forEach(button => button.addEventListener('click', e => {
+    mainLogic(e);
+    checkError();
+}));
 
+function mainLogic(e) {
     if (e.target.innerText === 'CLEAR') clearBtn();
 
     else if (e.target.innerText === 'DEL') delBtn(e);
@@ -75,8 +79,7 @@ buttons.forEach(button => button.addEventListener('click', e => {
         }
         lowerDisplay.textContent = '';
     }
-    checkError();
-}));
+}
 
 function checkError() {
     if (lowerDisplay.textContent.includes('NaN') || upperDisplay.textContent.includes('NaN') || lowerDisplay.textContent.includes('Infinity') || upperDisplay.textContent.includes('Infinity')) {
