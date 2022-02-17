@@ -1,4 +1,4 @@
-import * as basicOps from '/modules/basicOps.js';
+import * as basicOps from './modules/basicOps.js';
 
 const upperDisplay = document.querySelector('.upper-display');
 const lowerDisplay = document.querySelector('.lower-display');
