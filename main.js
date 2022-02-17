@@ -1,7 +1,5 @@
 import * as basicOps from '/modules/basicOps.js';
 
-<<<<<<< HEAD
-=======
 const upperDisplay = document.querySelector('.upper-box');
 const lowerDisplay = document.querySelector('.lower-box');
 const buttons = document.querySelectorAll('.btn');
@@ -76,4 +74,3 @@ function operate(x,y,operation) {
         return basicOps.divide(x,y);
     }
 }
->>>>>>> parent of d15a8ce (edits)
