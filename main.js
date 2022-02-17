@@ -109,10 +109,8 @@ function operate(x,y,operation) {
 }
 function roundResult(num) {
     let numStr = String(num);
-    console.log(numStr);
     if (numStr.includes('.')) {
         let decimals = numStr.slice(numStr.indexOf('.') + 1, numStr.length);
-        console.log(decimals);
         if (decimals.length > 7) {
             return +num.toFixed(6);
         }
