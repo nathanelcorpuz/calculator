@@ -45,10 +45,13 @@ main {
     height: 100%;
 }
 
+<<<<<<< HEAD
 .lower-display {
     font-size: 1.45em;
 }
 
+=======
+>>>>>>> parent of d15a8ce (edits)
 
 .rows {
     display: grid;
