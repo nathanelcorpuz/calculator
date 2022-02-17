@@ -3,6 +3,7 @@ import * as basicOps from '/modules/basicOps.js';
 const upperDisplay = document.querySelector('.upper-display');
 const lowerDisplay = document.querySelector('.lower-display');
 const buttons = document.querySelectorAll('.btn');
+const html = document.querySelector('html');
 
 let x = null;
 let y = null;
@@ -10,21 +11,15 @@ let sign = '';
 let result1 = null;
 let result2 = null;
 
+html.addEventListener('keypress', e => {
+    
+})
+
 buttons.forEach(button => button.addEventListener('click', e => {
 
-    if (e.target.innerText === 'CLEAR') {
-        upperDisplay.textContent = '';
-        lowerDisplay.textContent = '';
-        x = null;
-        y = null;
-        sign = '';
-        result1 = null;
-        result2 = null;
-    }
+    if (e.target.innerText === 'CLEAR') clearBtn();
 
-    else if (e.target.innerText === 'DEL') {
-        lowerDisplay.textContent = lowerDisplay.textContent.slice(0, lowerDisplay.textContent.length - 1);
-    }
+    else if (e.target.innerText === 'DEL') delBtn(e);
 
     else if (e.target.innerText.search(/[0-9]/) === 0) {
         if (lowerDisplay.textContent.includes('=')) lowerDisplay.textContent = '';
@@ -37,9 +32,11 @@ buttons.forEach(button => button.addEventListener('click', e => {
     }
 
     else if (e.target.innerText === '=') {
-
-        if (result1 != null) {
-            console.log('this came from a basic ops func');
+        if (x != null && result1 != null) {
+            y = +lowerDisplay.textContent;
+            upperDisplay.textContent = `${result1} ${sign} ${y}`;
+            result1 = operate(result1,y,sign);
+            lowerDisplay.textContent = `= ${result1}`
         }
         else if (x != null) {
             y = +lowerDisplay.textContent;
@@ -49,16 +46,18 @@ buttons.forEach(button => button.addEventListener('click', e => {
         }
     }
 
-    else if (e.target.innerText.search(/[/*\-+]/ === 0)) {   
+    else if (e.target.innerText.search(/[/*\-+]/) === 0) {   
         if (x == null) {
             x = +lowerDisplay.textContent;
             sign = e.target.innerText;
             upperDisplay.textContent = `${x} ${sign}`;
         }
         else if (lowerDisplay.textContent.includes('=')) {
-            console.log('this came from an equal operation');
             sign = e.target.innerText;
             upperDisplay.textContent = `${result1} ${sign}`;
+            x = +result1;
+            y = null;
+            result1 = null;
         }
         else if (x != null && y == null) {
             y = +lowerDisplay.textContent;
@@ -76,8 +75,31 @@ buttons.forEach(button => button.addEventListener('click', e => {
         }
         lowerDisplay.textContent = '';
     }
-
+    checkError();
 }));
+
+function checkError() {
+    if (lowerDisplay.textContent.includes('NaN') || upperDisplay.textContent.includes('NaN') || lowerDisplay.textContent.includes('Infinity') || upperDisplay.textContent.includes('Infinity')) {
+        alert('Invalid input, please try again');
+        clearBtn();
+        return;
+    }
+}
+
+function delBtn() {
+    if (lowerDisplay.textContent.includes('=')) return;
+    lowerDisplay.textContent = lowerDisplay.textContent.slice(0, lowerDisplay.textContent.length - 1);
+}
+
+function clearBtn() {
+    upperDisplay.textContent = '';
+    lowerDisplay.textContent = '';
+    x = null;
+    y = null;
+    sign = '';
+    result1 = null;
+    result2 = null;
+}
 
 function operate(x,y,operation) {
     if (operation === '+') {
