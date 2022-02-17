@@ -16,7 +16,6 @@ html.addEventListener('keydown', e => {
     keyPressed = e.key;
     calcLogic(keyPressed);
 })
-
 buttons.forEach(button => button.addEventListener('click', e => {
     keyPressed = e.target.innerText;
     calcLogic(keyPressed);
@@ -38,11 +37,13 @@ function calcLogic(key) {
             y = +lowerDisplay.textContent;
             upperDisplay.textContent = `${result1} ${sign} ${y}`;
             result1 = operate(result1,y,sign);
+            result1 = roundResult(result1);
             lowerDisplay.textContent = `= ${result1}`
         }
         else if (x != null) {
             y = +lowerDisplay.textContent;
             result1 = operate(x,y,sign);
+            result1 = roundResult(result1);
             upperDisplay.textContent = `${x} ${sign} ${y}`;
             lowerDisplay.textContent = `= ${result1}`;
         }
@@ -63,12 +64,14 @@ function calcLogic(key) {
         else if (x != null && y == null) {
             y = +lowerDisplay.textContent;
             result1 = operate(x,y,sign);
+            result1 = roundResult(result1);
             sign = key;
             upperDisplay.textContent = `${result1} ${sign}`;
         }
         else if (x != null && y != null) {
             y = +lowerDisplay.textContent;
             result2 = operate(result1, y, sign);
+            result2 = roundResult(result2);
             sign = key;
             upperDisplay.textContent = `${result2} ${sign}`;
             x = result2;
@@ -103,4 +106,17 @@ function operate(x,y,operation) {
     else if (operation === '-') return basicOps.subtract(x,y);
     else if (operation === '*') return basicOps.multiply(x,y);
     else if (operation === '/') return basicOps.divide(x,y);
+}
+function roundResult(num) {
+    let numStr = String(num);
+    console.log(numStr);
+    if (numStr.includes('.')) {
+        let decimals = numStr.slice(numStr.indexOf('.') + 1, numStr.length);
+        console.log(decimals);
+        if (decimals.length > 7) {
+            return +num.toFixed(6);
+        }
+        return +num;
+    }
+    else return +num;
 }
