@@ -1,61 +1,80 @@
 import * as basicOps from '/modules/basicOps.js';
 
-const upperDisplay = document.querySelector('.upper-box');
-const lowerDisplay = document.querySelector('.lower-box');
+const upperDisplay = document.querySelector('.upper-display');
+const lowerDisplay = document.querySelector('.lower-display');
 const buttons = document.querySelectorAll('.btn');
 
 let x = null;
 let y = null;
 let sign = '';
-let result = null;
+let result1 = null;
+let result2 = null;
 
 buttons.forEach(button => button.addEventListener('click', e => {
 
     if (e.target.innerText === 'CLEAR') {
+        upperDisplay.textContent = '';
+        lowerDisplay.textContent = '';
         x = null;
         y = null;
-        result = null;
         sign = '';
-        
-        lowerDisplay.textContent = '';
-        upperDisplay.textContent = '';
+        result1 = null;
+        result2 = null;
     }
 
-    if (e.target.innerText.search(/[0-9]/) === 0) {
-        if (lowerDisplay.textContent == result) {
-            lowerDisplay.textContent = '';
-            upperDisplay.textContent = '';
-        }
+    else if (e.target.innerText === 'DEL') {
+        lowerDisplay.textContent = lowerDisplay.textContent.slice(0, lowerDisplay.textContent.length - 1);
+    }
+
+    else if (e.target.innerText.search(/[0-9]/) === 0) {
+        if (lowerDisplay.textContent.includes('=')) lowerDisplay.textContent = '';
         lowerDisplay.textContent += e.target.innerText;
-    };
-
-    if (e.target.innerText.search(/[/*\-+]/) === 0) {
-        if (upperDisplay.textContent.includes('+') || upperDisplay.textContent.includes('-') || upperDisplay.textContent.includes('*') || upperDisplay.textContent.includes('/')) {
-            y = +lowerDisplay.textContent;
-            result = operate(x,y,sign);
-            console.log(result);
-            lowerDisplay.textContent = result;
-            sign = e.target.innerText;
-            x = +lowerDisplay.textContent;
-            lowerDisplay.textContent = '';
-            upperDisplay.textContent = `${x} ${sign}`;
-            return;
-        }
-        sign = e.target.innerText;
-        x = +lowerDisplay.textContent;
-        lowerDisplay.textContent = '';
-        upperDisplay.textContent = `${x} ${sign}`;
     }
 
-    if (e.target.innerText === '=') {
-        if (x !== null) {
+    else if (e.target.innerText === '.') {
+        if (lowerDisplay.textContent.includes('.')) return;
+        lowerDisplay.textContent += '.';
+    }
+
+    else if (e.target.innerText === '=') {
+
+        if (result1 != null) {
+            console.log('this came from a basic ops func');
+        }
+        else if (x != null) {
             y = +lowerDisplay.textContent;
-            result = operate(x,y,sign);
+            result1 = operate(x,y,sign);
             upperDisplay.textContent = `${x} ${sign} ${y}`;
-            lowerDisplay.textContent = result;
-            x = null;
+            lowerDisplay.textContent = `= ${result1}`;
+        }
+    }
+
+    else if (e.target.innerText.search(/[/*\-+]/ === 0)) {   
+        if (x == null) {
+            x = +lowerDisplay.textContent;
+            sign = e.target.innerText;
+            upperDisplay.textContent = `${x} ${sign}`;
+        }
+        else if (lowerDisplay.textContent.includes('=')) {
+            console.log('this came from an equal operation');
+            sign = e.target.innerText;
+            upperDisplay.textContent = `${result1} ${sign}`;
+        }
+        else if (x != null && y == null) {
+            y = +lowerDisplay.textContent;
+            result1 = operate(x,y,sign);
+            sign = e.target.innerText;
+            upperDisplay.textContent = `${result1} ${sign}`;
+        }
+        else if (x != null && y != null) {
+            y = +lowerDisplay.textContent;
+            result2 = operate(result1, y, sign);
+            sign = e.target.innerText;
+            upperDisplay.textContent = `${result2} ${sign}`;
+            x = result2;
             y = null;
         }
+        lowerDisplay.textContent = '';
     }
 
 }));
